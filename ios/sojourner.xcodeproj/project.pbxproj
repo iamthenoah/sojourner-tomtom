@@ -26,13 +26,6 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = sojourner;
 		};
-		2168E65526E30224004091B9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2168E65126E30224004091B9 /* RNCGeolocation.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNCGeolocation;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -49,7 +42,6 @@
 		21344E4426E07A4000243214 /* PointOfIntrestAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PointOfIntrestAPI.h; sourceTree = "<group>"; };
 		21344E4526E07A4000243214 /* PointOfIntrestAPI.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PointOfIntrestAPI.m; sourceTree = "<group>"; };
 		2168E64F26E2FBF5004091B9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
-		2168E65126E30224004091B9 /* RNCGeolocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCGeolocation.xcodeproj; path = "../node_modules/@react-native-community/geolocation/ios/RNCGeolocation.xcodeproj"; sourceTree = "<group>"; };
 		6423831EA8574132BED9D8CC /* libPods-sojourner.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-sojourner.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-sojourner-sojournerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-sojourner-sojournerTests.debug.xcconfig"; path = "Target Support Files/Pods-sojourner-sojournerTests/Pods-sojourner-sojournerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = sojourner/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -112,14 +104,6 @@
 			name = sojourner;
 			sourceTree = "<group>";
 		};
-		2168E65226E30224004091B9 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				2168E65626E30224004091B9 /* libRNCGeolocation.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,7 +118,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				2168E65126E30224004091B9 /* RNCGeolocation.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -248,12 +231,6 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 2168E65226E30224004091B9 /* Products */;
-					ProjectRef = 2168E65126E30224004091B9 /* RNCGeolocation.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* sojourner */,
@@ -261,16 +238,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		2168E65626E30224004091B9 /* libRNCGeolocation.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNCGeolocation.a;
-			remoteRef = 2168E65526E30224004091B9 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -572,7 +539,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/glog\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/libevent\"",
 					/usr/lib/swift,
-					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/sojourner-awcblsmozhzbvtcutlgsyqbofccf/Build/Products/Debug-iphoneos/libRNCGeolocation.a\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -631,7 +597,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/glog\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/libevent\"",
 					/usr/lib/swift,
-					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/sojourner-awcblsmozhzbvtcutlgsyqbofccf/Build/Products/Debug-iphoneos/libRNCGeolocation.a\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
