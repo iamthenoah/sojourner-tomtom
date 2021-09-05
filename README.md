@@ -17,7 +17,7 @@ Add a key is easy and can be done in two ways:
 
 * Via Xcode
 
-1. Open `ios/sojourner.xcodeproj`
+1. Open `ios/sojourner.xcworkspace`
 
 2. Navigation to `Product` > `Scheme` > `Edit Scheme...` > `Run`
 
