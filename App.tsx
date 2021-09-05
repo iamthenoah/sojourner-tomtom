@@ -43,17 +43,19 @@ export default class App extends React.Component<{}, AppState> {
     }
 
     async componentDidMount() {
+        /* eslint-disable react/no-did-mount-set-state */
         // check for geo-location permissions
         const permission = PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
         const state = await check(permission)
 
-        if (state != RESULTS.GRANTED) {
+        if (state !== RESULTS.GRANTED) {
             const result = await request(permission)
 
             this.setState({
                 hasGeoLocation: result === RESULTS.GRANTED
             })
         }
+        /* eslint-enable react/no-did-mount-set-state */
     }
 
     searchNewPointsOfIntrests = (query: string) => {
@@ -114,10 +116,7 @@ export default class App extends React.Component<{}, AppState> {
 
                 <View style={style.contentContainer}>
                     {isPending && !pois && (
-                        <ActivityIndicator
-                            size='large'
-                            style={{ marginVertical: '50%' }}
-                        />
+                        <ActivityIndicator size='large' style={style.loader} />
                     )}
 
                     {error && <ErrorBox error={error} />}
@@ -150,5 +149,8 @@ const style = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: '#EEEEEE',
         flex: 1
+    },
+    loader: {
+        marginVertical: '50%'
     }
 })

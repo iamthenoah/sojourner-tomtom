@@ -4,6 +4,9 @@ module.exports = {
     rules: {
         'no-unused-vars': ['warn', { args: 'none' }],
         indent: ['warn', 4],
-        'no-tabs': 0
+        'comma-dangle': 0,
+        'jsx-quotes': 0,
+        'no-tabs': 0,
+        semi: 0
     }
 }

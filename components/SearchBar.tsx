@@ -29,7 +29,7 @@ export default class SearchBar extends React.Component<SearchBarProps, SearchBar
         const text = input.trim()
 
         // only perform a search if length is > 3
-        if (text.length > 3 && this.state.oldQuery != text) {
+        if (text.length > 3 && this.state.oldQuery !== text) {
             this.props.onSearch(text)
         }
 
@@ -41,13 +41,13 @@ export default class SearchBar extends React.Component<SearchBarProps, SearchBar
         this.setState({ oldQuery: text })
 
         // do search if it is a new query
-        if (text != this.state.oldQuery) {
+        if (text !== this.state.oldQuery) {
             this.props.onSearch(text)
         }
     }
 
     render() {
-        const hasInput = this.state.oldQuery.length != 0
+        const hasInput = this.state.oldQuery.length !== 0
 
         return (
             <TextInput
