@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TextInputProps,
     NativeSyntheticEvent,
+    TextInputChangeEventData,
     TextInputSubmitEditingEventData
 } from 'react-native'
 
@@ -24,7 +25,7 @@ export default class SearchBar extends React.Component<SearchBarProps, SearchBar
         this.state = { oldQuery: '' }
     }
 
-    onInputChanged = (input: string) => {
+    onChange = (input: string) => {
         // remove white spaces since the API does not like trailing spaces.
         const text = input.trim()
 
@@ -38,9 +39,12 @@ export default class SearchBar extends React.Component<SearchBarProps, SearchBar
 
     onSubmit = (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
         const text = e.nativeEvent.text.trim()
-        text != this.state.oldQuery
-            ? this.props.onSearch(text)
-            : this.setState({ oldQuery: text })
+        this.setState({ oldQuery: text })
+
+        // do search if it is a new query
+        if (text != this.state.oldQuery) {
+            this.props.onSearch(text)
+        }
     }
 
     render() {
@@ -48,9 +52,10 @@ export default class SearchBar extends React.Component<SearchBarProps, SearchBar
 
         return (
             <TextInput
+                testID='search-bar-input'
                 returnKeyType='go'
                 onSubmitEditing={this.onSubmit}
-                onChangeText={_.debounce(this.onInputChanged, 500)}
+                onChangeText={_.debounce(this.onChange, 500)}
                 placeholder={!hasInput ? 'Where to next?' : ''}
                 {...this.props}
                 style={
