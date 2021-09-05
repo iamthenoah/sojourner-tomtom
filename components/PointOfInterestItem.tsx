@@ -24,12 +24,14 @@ export default class PointOfIntrestItem extends PureComponent<PoiData, {}> {
                 <Text>
                     {municipality}, {countryCode}
                 </Text>
-                <Text style={style.line}>
-                    Address: {postalCode} {streetName}
-                </Text>
-                {phone && <Text style={style.line}>Contact: {phone}</Text>}
+                {streetName && postalCode && (
+                    <Text style={style.line}>
+                        • Address: {postalCode} - {streetName}
+                    </Text>
+                )}
+                {phone && <Text style={style.line}>• Contact: {phone}</Text>}
                 {dist && (
-                    <Text style={style.line}>{Math.round(dist / 1000)} KM away</Text>
+                    <Text style={style.distance}>{Math.round(dist / 1000)} KM away</Text>
                 )}
             </View>
         )
@@ -56,6 +58,10 @@ const style = StyleSheet.create({
         flex: 1
     },
     line: {
+        marginTop: 10
+    },
+    distance: {
+        fontWeight: 'bold',
         marginTop: 10
     }
 })
