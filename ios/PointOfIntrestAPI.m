@@ -66,7 +66,7 @@ RCT_EXPORT_METHOD(fetchPOI:(NSString *)search paramaters:(NSDictionary *)additio
   
   // Appending API Key to query paramaters.
   // NOTE: Would not normally hard-code API key; kept it simple for the sake of this app.
-  [queryItems addObject:[NSURLQueryItem queryItemWithName:@"key" value:@"xbut0FprHUpkK7BOoLxLzPYg6mDGOWyA"]];
+  [queryItems addObject:[NSURLQueryItem queryItemWithName:@"key" value:NSProcessInfo.processInfo.environment[@"TOMTOM_API_KEY"]]];
   
   if ([params count]) {
     // if has query params, cycle through and append to url component
