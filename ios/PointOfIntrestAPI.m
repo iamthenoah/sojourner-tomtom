@@ -47,8 +47,6 @@ RCT_EXPORT_METHOD(fetchPOI:(NSString *)search paramaters:(NSDictionary *)additio
   NSURLComponents *components = [NSURLComponents componentsWithString:endpoint];
   components.queryItems = queryItems;
 
-  NSLog(@"%@", components.URL);
-  
   // create request with url and session for sending req.
   NSURLRequest *request = [NSURLRequest requestWithURL:components.URL];
   NSURLSession *session = [NSURLSession sharedSession];
@@ -91,7 +89,7 @@ RCT_EXPORT_METHOD(fetchPOI:(NSString *)search paramaters:(NSDictionary *)additio
   locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
 
   // check ios version and request access to loc.
-  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0)
+  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 && !locationManager.locationServicesEnabled)
     [locationManager requestWhenInUseAuthorization];
 
   [locationManager startUpdatingLocation];
@@ -99,7 +97,7 @@ RCT_EXPORT_METHOD(fetchPOI:(NSString *)search paramaters:(NSDictionary *)additio
   double lon = locationManager.location.coordinate.longitude;
   double lat = locationManager.location.coordinate.longitude;
 
-  // close location updating for performance.
+  // stop location updating for performance.
   [locationManager stopUpdatingLocation];
 
   // convert double to string
