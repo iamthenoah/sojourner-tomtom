@@ -6,7 +6,6 @@ import {
     StyleSheet,
     TextInputProps,
     NativeSyntheticEvent,
-    TextInputChangeEventData,
     TextInputSubmitEditingEventData
 } from 'react-native'
 
