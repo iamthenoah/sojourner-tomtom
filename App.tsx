@@ -1,52 +1,154 @@
-import React, { useEffect, useState } from 'react';
-import { useApi, Nullable } from './hooks';
+import { request, check, PERMISSIONS, RESULTS } from 'react-native-permissions'
+import { PoiApiResponse, PoiData, ResponseSummary } from './interfaces'
+import PointOfIntrestItem from './components/PointOfInterestItem'
+import SearchSummaryInfo from './components/SearchSummaryInfo'
+import { ErrorBox, NoResults } from './components/MessageBox'
+import SearchBar from './components/SearchBar'
+import React from 'react'
 
 import {
+    View,
+    FlatList,
+    StatusBar,
+    StyleSheet,
     SafeAreaView,
-    ScrollView,
-    TextInput,
-    Button,
-    Text,
-    View
-} from 'react-native';
+    NativeModules,
+    ActivityIndicator
+} from 'react-native'
 
-const App = () => {
-    const [query, setQuery] = useState('pizza');
-    const [data, setData] = useState<Nullable<any>>(null);
-    const [error, setError] = useState<Nullable<Error>>(null);
-    const poi = useApi();
+export type Nullable<T> = T | null
 
-    useEffect(() => {
-        setData(null);
-        setError(null);
-        if (poi.error) setError(poi.error);
-        if (poi.data) setData(poi.data as any);
-    }, [poi.pending]);
+interface AppState {
+    pois: Nullable<PoiData[]>
+    error: Nullable<Error>
+    isPending: boolean
+    currentPage: number
+    searchSummary: Nullable<ResponseSummary>
+    hasGeoLocation: boolean
+}
 
-    const searchPointsOfIntrests = () => {
-        poi.fetch(query, { 'ofs': '0' , 'limit': '10', 'countrySet': 'FR' })
+const initialAppState = {
+    pois: null,
+    error: null,
+    isPending: false,
+    currentPage: 0,
+    searchSummary: null
+}
+
+export default class App extends React.Component<{}, AppState> {
+    constructor(props: any) {
+        super(props)
+
+        this.state = { ...initialAppState, hasGeoLocation: false }
     }
 
-    return (
-        <SafeAreaView >
-            <ScrollView>
-                <View>
-                    <TextInput 
-                        value={query}
-                        onChangeText={setQuery}
-                        placeholder='Find POI...'
-                    />
-                    <Button 
-                        title="Search"
-                        onPress={searchPointsOfIntrests} 
-                    />
-                    {data && (<Text>{JSON.stringify(data)}</Text>)}
-                    {error && (<Text>ERROR: {JSON.stringify(error)}</Text>)}
-                    {poi.pending && (<Text>Loading data...</Text>)}
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    );
-};
+    async componentDidMount() {
+        // check for geo-location permissions
+        const permission = PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
+        const state = await check(permission)
 
-export default App;
+        if (state != RESULTS.GRANTED) {
+            const result = await request(permission)
+
+            this.setState({
+                hasGeoLocation: result === RESULTS.GRANTED
+            })
+        }
+    }
+
+    searchNewPointsOfIntrests = (query: string) => {
+        const { TomTomAPI } = NativeModules
+
+        // rest app state anew to keep UI clean.
+        this.setState(initialAppState)
+        // however, setting pending to true
+        this.setState({ isPending: true })
+
+        TomTomAPI.fetchPOI(query, {})
+            .then(({ results, summary }: PoiApiResponse) => {
+                this.setState({ pois: results, searchSummary: summary })
+            })
+            .catch((error: Error) => this.setState({ error }))
+            .then(() => this.setState({ isPending: false }))
+    }
+
+    loadMoreData = () => {
+        const { TomTomAPI } = NativeModules
+
+        this.setState({ isPending: true })
+
+        const nextPage = this.state.currentPage + 1
+        const query = this.state.searchSummary?.query ?? ''
+
+        // TomTomAPI modules automatically formats query paramaters
+        // it requires however that all provided paramaters are strings.
+        // here we are setting the 'ofs' offset
+        const params = { ofs: nextPage.toString() }
+
+        TomTomAPI.fetchPOI(query, params)
+            .then(({ results, summary }: PoiApiResponse) => {
+                const pois = this.state.pois
+                pois?.push(...results)
+                this.setState({ pois, searchSummary: summary })
+            })
+            .catch((error: Error) => this.setState({ error }))
+            .then(() => this.setState({ isPending: false }))
+
+        // lastly, save nextPage as new currentPage
+        this.setState({ currentPage: nextPage })
+    }
+
+    render() {
+        const { error, pois, isPending, searchSummary, hasGeoLocation } = this.state
+
+        return (
+            <SafeAreaView style={style.mainContainer}>
+                <StatusBar barStyle='default' />
+
+                <SearchBar onSearch={this.searchNewPointsOfIntrests} />
+
+                <SearchSummaryInfo
+                    hasGeoLocation={hasGeoLocation}
+                    summary={searchSummary}
+                />
+
+                <View style={style.contentContainer}>
+                    {isPending && !pois && (
+                        <ActivityIndicator
+                            size='large'
+                            style={{ marginVertical: '50%' }}
+                        />
+                    )}
+
+                    {error && <ErrorBox error={error} />}
+
+                    {pois && !pois.length && searchSummary && (
+                        <NoResults query={searchSummary.query} />
+                    )}
+
+                    {pois && pois.length > 0 && (
+                        <FlatList
+                            data={pois}
+                            keyExtractor={poi => `${poi.id}${Math.random()}`}
+                            renderItem={({ item }) => <PointOfIntrestItem {...item} />}
+                            onEndReached={this.loadMoreData}
+                            onEndReachedThreshold={1}
+                        />
+                    )}
+                </View>
+            </SafeAreaView>
+        )
+    }
+}
+
+const style = StyleSheet.create({
+    mainContainer: {
+        display: 'flex',
+        height: '100%'
+    },
+    contentContainer: {
+        borderTopWidth: 1,
+        borderTopColor: '#EEEEEE',
+        flex: 1
+    }
+})
