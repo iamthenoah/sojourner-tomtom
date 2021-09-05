@@ -88,17 +88,10 @@ RCT_EXPORT_METHOD(fetchPOI:(NSString *)search paramaters:(NSDictionary *)additio
   // get accuracy by km.
   locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
 
-  // check ios version and request access to loc.
-  if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0 && !locationManager.locationServicesEnabled)
-    [locationManager requestWhenInUseAuthorization];
-
   [locationManager startUpdatingLocation];
   
   double lon = locationManager.location.coordinate.longitude;
-  double lat = locationManager.location.coordinate.longitude;
-
-  // stop location updating for performance.
-  [locationManager stopUpdatingLocation];
+  double lat = locationManager.location.coordinate.latitude;
 
   // convert double to string
   NSString *lonString = [NSString stringWithFormat:@"%f", lon];
@@ -107,6 +100,9 @@ RCT_EXPORT_METHOD(fetchPOI:(NSString *)search paramaters:(NSDictionary *)additio
   // append to array
   [queryParamaters addObject:[NSURLQueryItem queryItemWithName:@"lon" value:lonString]];
   [queryParamaters addObject:[NSURLQueryItem queryItemWithName:@"lat" value:latString]];
+  
+  // stop location updating for performance.
+  [locationManager stopUpdatingLocation];
 }
 
 @end
