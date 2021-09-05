@@ -9,9 +9,9 @@ export default class PointOfIntrestItem extends PureComponent<PoiData, {}> {
     }
 
     render() {
-        const { address, score, poi, dist } = this.props
+        const { address, poi, dist } = this.props
         const { streetName, municipality, countryCode, postalCode } = address
-        const { classifications, categories, name } = poi
+        const { classifications, name, phone } = poi
 
         return (
             <View style={style.container}>
@@ -24,6 +24,10 @@ export default class PointOfIntrestItem extends PureComponent<PoiData, {}> {
                 <Text>
                     {municipality}, {countryCode}
                 </Text>
+                <Text style={style.line}>
+                    Address: {postalCode} {streetName}
+                </Text>
+                {phone && <Text style={style.line}>Contact: {phone}</Text>}
                 {dist && (
                     <Text style={style.line}>{Math.round(dist / 1000)} KM away</Text>
                 )}
@@ -48,7 +52,8 @@ const style = StyleSheet.create({
     },
     name: {
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        flex: 1
     },
     line: {
         marginTop: 10
