@@ -54,7 +54,7 @@ const style = StyleSheet.create({
     }
 })
 
-export const NoResults = ({ query }: { query: string; }) => {
+export const NoResults = ({ query }: { query: string }) => {
     return (
         <MessageBox type='warning' title='No results.'>
             <Text>No results matching search {query} found.</Text>
